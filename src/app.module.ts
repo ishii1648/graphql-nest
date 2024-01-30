@@ -5,12 +5,14 @@ import { Module } from '@nestjs/common';
 import { redisStore } from 'cache-manager-redis-yet';
 import { CacheModule } from '@nestjs/cache-manager';
 import { GraphQLModule } from '@nestjs/graphql';
-import { CatsModule } from './cats/cats.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { userModule } from './user/user.module';
 import { join } from 'path';
 
 @Module({
   imports: [
-    CatsModule,
+    PrismaModule,
+    userModule,
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
       isGlobal: true,

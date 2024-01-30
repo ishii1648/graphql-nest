@@ -9,15 +9,15 @@
 /* eslint-disable */
 
 export abstract class IQuery {
-    abstract cats(): Nullable<Nullable<Cat>[]> | Promise<Nullable<Nullable<Cat>[]>>;
+    abstract users(): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
 
-    abstract cat(id: string): Nullable<Cat> | Promise<Nullable<Cat>>;
+    abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
-export class Cat {
+export class User {
     id?: Nullable<number>;
     name?: Nullable<string>;
-    age?: Nullable<number>;
+    email?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;
