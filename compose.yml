@@ -3,6 +3,7 @@ services:
     image: redis:7
     ports:
       - 6379:6379
+
   mysql:
     image: mysql:8.3
     ports:
@@ -12,3 +13,22 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: sample
+
+  prometheus:
+    image: prom/prometheus:v2.45.3
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - localhost:host-gateway
+
+  grafana:
+    image: grafana/grafana-oss:10.3.1
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:
