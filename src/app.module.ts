@@ -3,12 +3,14 @@ import {
   NestModule,
   MiddlewareConsumer,
   RequestMethod,
+  Inject,
+  Logger,
 } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import type { RedisClientOptions } from 'redis';
-import { redisStore } from 'cache-manager-redis-yet';
-import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore, RedisCache } from 'cache-manager-redis-yet';
+import { CacheModule, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { LoggerMiddleware } from './logger.middleware';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaModule } from './prisma/prisma.module';
@@ -38,6 +40,12 @@ import { join } from 'path';
   ],
 })
 export class AppModule implements NestModule {
+  constructor(@Inject(CACHE_MANAGER) cacheManager: RedisCache) {
+    cacheManager.store.client.on('error', (error) => {
+      Logger.error(`occur redis exception: ${error}`);
+    });
+  }
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
